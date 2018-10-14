@@ -1,13 +1,29 @@
 # import the Flask class from the flask module
-from flask import Flask, render_template, redirect, url_for, request
-
+from flask import Flask, render_template, redirect, url_for, request, session, flash
+from functools import wraps
 # create the application project
 app = Flask(__name__)
 
+# Key should be random, and moved to separate file for security
+app.secret_key = "my precious"
+
+# login required decorator
+def login_required(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return f(*args, **kwargs)
+        else:
+            flash('Only for authorised users. Please log in.')
+            return redirect(url_for('login'))
+    return wrap
+
 # use decorators to link the function to a url
 @app.route('/')
+@login_required
 def home():
-    return "Hello, world!" # return a string
+    # return "Hello, world!" # return a string
+    return render_template("index.html")  # render a template
 
 @app.route('/welcome')
 def welcome():
@@ -20,8 +36,18 @@ def login():
         if request.form['username'] != 'admin' or request.form['password'] != 'admin':
             error = 'Invalid credentials. Please try again.'
         else:
+            session['logged_in'] = True
+            flash('You were logged in successfully')
             return redirect(url_for('home'))
     return render_template('login.html', error=error)
+
+@app.route('/logout')
+@login_required
+def logout():
+    session.pop('logged_in', None)
+    flash('You successfully logged out')
+    return redirect(url_for('welcome'))
+
 
 
 # start the server with the 'run()' method
