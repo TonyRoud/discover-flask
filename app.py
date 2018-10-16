@@ -29,21 +29,19 @@ def home():
     # return "Hello, world!" # return a string
     g.db = connect_db()  # g is a flask tool for storing temp objects
     cur = g.db.execute('select * from posts')
-    # print cur
-    # print cur.fetchall
-    post_dict = {}
+
+    posts = []
     for row in cur.fetchall():
-        post_dict["title"] = row[0]
-        post_dict["description"] = row[1]
-        print post_dict
-    posts = [dict(title=row[0], description=row[1]) for row in cur.fetchall()]
-    # print posts
+        posts.append(dict(title=row[0], description=row[1]))
+
+    # posts = [dict(title=row[0], description=row[1]) for row in cur.fetchall()]
+
     g.db.close()
     return render_template('index.html', posts=posts)  # render a template
 
 @app.route('/welcome')
 def welcome():
-    return render_template("welcome.html") # render a template
+    return render_template('welcome.html') # render a template
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
