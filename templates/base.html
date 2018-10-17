@@ -7,24 +7,24 @@
     <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
 </head>
 
-<body>
+    <body>
 
-    <div class="container">
+        <div class="container">
 
-        <!-- child template -->
-        {% block content %}{% endblock %}
+            <!-- child template -->
+            {% block content %}{% endblock %}
 
-        <!-- errors -->
-        {% if error %}
-        <p class="error"><strong>Error:</strong> {{ error }} </p>
-        {% endif %}
+            <!-- errors -->
+            {% if error %}
+            <p class="error"><strong>Error:</strong> {{ error }} </p>
+            {% endif %}
 
-        <!-- messages -->
-        {% for message in get_flashed_messages() %}
-        {{ message }}
-        {% endfor %}
-    </div>
+            <!-- messages -->
+            {% for message in get_flashed_messages() %}
+            {{ message }}
+            {% endfor %}
+        </div>
 
-</body>
+    </body>
 
 </html>
