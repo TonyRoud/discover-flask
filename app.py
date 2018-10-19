@@ -26,17 +26,20 @@ def login_required(f):
 @app.route('/')
 @login_required
 def home():
-    # return "Hello, world!" # return a string
-    g.db = connect_db()  # g is a flask tool for storing temp objects
-    cur = g.db.execute('select * from posts')
-
     posts = []
-    for row in cur.fetchall():
-        posts.append(dict(title=row[0], description=row[1]))
+    try:
+        # return "Hello, world!" # return a string
+        g.db = connect_db()  # g is a flask tool for storing temp objects
+        cur = g.db.execute('select * from posts')
 
-    # posts = [dict(title=row[0], description=row[1]) for row in cur.fetchall()]
+        for row in cur.fetchall():
+            posts.append(dict(title=row[0], description=row[1]))
 
-    g.db.close()
+        # posts = [dict(title=row[0], description=row[1]) for row in cur.fetchall()]
+
+        g.db.close()
+    except sqlite3.OperationalError:
+        flash("No database detected!")
     return render_template('index.html', posts=posts)  # render a template
 
 @app.route('/welcome')
