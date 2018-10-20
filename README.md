@@ -10,4 +10,4 @@ https://github.com/realpython/discover-flask
 
 ## View site on Heroku
 
-https://trflaskintro.herokuapp.com/welcome
+https://trflaskintro.herokuapp.com
